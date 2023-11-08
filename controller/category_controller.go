@@ -22,7 +22,7 @@ func GetCategoryList(c *gin.Context) {
 
 func CreateCategory(c *gin.Context) {
 	var category models.Category
-	var cat request.CategoryCreateRequest
+	var cat request.CategoryRequest
 
 	err := c.ShouldBindJSON(&cat)
 
@@ -38,7 +38,7 @@ func CreateCategory(c *gin.Context) {
 	result := initialise.DB.Create(&category)
 
 	if result.Error != nil {
-		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error or already in List")
 		return
 	}
 

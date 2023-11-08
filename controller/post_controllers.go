@@ -3,17 +3,28 @@ package controller
 import (
 	"crud/dto"
 	"crud/initialise"
-	"crud/models"
+	postmodel "crud/internal/modules/post/postModel"
+	postservice "crud/internal/modules/post/postService"
 	"crud/request"
-	"crud/response"
 	"crud/utils"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+type Controllers struct {
+	postService postservice.PostServiceInterface
+}
+
+func New() *Controllers {
+	return &Controllers{
+		postService: postservice.New(),
+	}
+}
+
 func GetPosts(c *gin.Context) {
-	var posts []models.Posts
+	var posts []postmodel.Posts
 
 	result := initialise.DB.Find(&posts)
 
@@ -26,21 +37,12 @@ func GetPosts(c *gin.Context) {
 }
 
 func CreatePost(c *gin.Context) {
-	var p models.Posts
+	var p postmodel.Posts
 	var post request.PostCreateRequest
-	var userID string
-	user, ok := c.Get("user")
+	userID := utils.GetDataFromContext(c, "user")
 
-	if ok {
-		if user, ok := user.(*response.UserDataResponse); ok {
-			userID = user.UserID
-		} else {
-			utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, "")
-			return
-		}
-	} else {
-		utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, "")
-		return
+	if userID == "" {
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
 	}
 
 	err := c.ShouldBindJSON(&post)
@@ -48,14 +50,7 @@ func CreatePost(c *gin.Context) {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, utils.ParseError(err)[1])
 		return
 	}
-
-	// p = models.Posts{
-	// 	Body:         post.Body,
-	// 	Title:        post.Title,
-	// 	UserId:       userID,
-	// 	CreatedAt:    utils.Now(),
-	// 	CategoryType: post.Category,
-	// }
+	log.Print(post)
 
 	p.Body = post.Body
 	p.Title = post.Title
@@ -74,21 +69,13 @@ func CreatePost(c *gin.Context) {
 }
 
 func UpdatePost(c *gin.Context) {
-	var post models.Posts
+	var post postmodel.Posts
 	var updatedPost request.PostUpdateRequest
-	var userID string
 
-	user, ok := c.Get("user")
+	userID := utils.GetDataFromContext(c, "user")
 
-	if ok {
-		if user, ok := user.(*response.UserDataResponse); ok {
-			userID = user.UserID
-		} else {
-			utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, "")
-			return
-		}
-	} else {
-		utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, "")
+	if userID == "" {
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
 		return
 	}
 
@@ -114,7 +101,6 @@ func UpdatePost(c *gin.Context) {
 	post.Body = updatedPost.Body
 	post.Title = updatedPost.Title
 	post.CategoryType = updatedPost.Category
-
 	result = initialise.DB.Save(&post)
 
 	if result.Error != nil {
@@ -126,20 +112,12 @@ func UpdatePost(c *gin.Context) {
 }
 
 func DeletePost(c *gin.Context) {
-	var post models.Posts
-	var userID string
+	var post postmodel.Posts
 	var deletePost request.PostDeleteRequest
-	user, ok := c.Get("user")
+	userID := utils.GetDataFromContext(c, "user")
 
-	if ok {
-		if user, ok := user.(*response.UserDataResponse); ok {
-			userID = user.UserID
-		} else {
-			utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, "")
-			return
-		}
-	} else {
-		utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, "")
+	if userID == "" {
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
 		return
 	}
 
@@ -173,9 +151,62 @@ func DeletePost(c *gin.Context) {
 }
 
 func GetPostByCategory(c *gin.Context) {
-	cat := c.Param("category")
+	var posts []postmodel.Posts
+	var cat request.CategoryRequest
 
-	if cat == ""{
-		
+	err := c.ShouldBindJSON(&cat)
+
+	if err != nil {
+		utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, utils.ParseError(err)[1])
+		return
 	}
+
+	result := initialise.DB.Find(&posts, "category_type = ?", cat.Category)
+
+	if result.Error != nil {
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
+		return
+	}
+
+	utils.JsonResponse(c, http.StatusOK, 1, posts, "")
+}
+
+func GetPostByUser(c *gin.Context) {
+	var posts []postmodel.Posts
+	userID := utils.GetDataFromContext(c, "user")
+
+	if userID == "" {
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
+		return
+	}
+
+	result := initialise.DB.Find(&posts, "user_id = ?", userID)
+	if result.Error != nil {
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
+		return
+	}
+	utils.JsonResponse(c, http.StatusOK, 1, posts, "")
+
+}
+
+func GetPostDateByUserAndCategory(c *gin.Context) {
+	var posts []postmodel.Posts
+	var reqPost request.UserAndCategoryRequest
+
+	err := c.ShouldBindJSON(&reqPost)
+
+	if err != nil {
+		utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, utils.ParseError(err)[1])
+		return
+	}
+	db := initialise.DB
+	result := db.Where(
+		db.Where("user_id = ?", reqPost.UserID).Where(db.Where("category_type = ?", reqPost.Category))).Find(&posts)
+
+	if result.Error != nil {
+		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
+		return
+	}
+
+	utils.JsonResponse(c, http.StatusOK, 1, posts, "")
 }

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"crud/models"
+	"crud/response"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -92,4 +93,20 @@ func JsonResponse(c *gin.Context, statusCode int, success int, data interface{},
 	c.JSON(statusCode, response)
 }
 
-// docker run image_name:tag_name
+func GetDataFromContext(c *gin.Context, key string) string {
+	var userID string
+	data, ok := c.Get(key)
+
+	if ok {
+		if data, ok := data.(*response.UserDataResponse); ok {
+			userID = data.UserID
+		} else {
+
+			return ""
+		}
+	} else {
+
+		return ""
+	}
+	return userID
+}

@@ -19,4 +19,4 @@ run: build
 test:
 	@go test -v ./...
 
-.PHONY: postgres createdb dropdb
+.PHONY: postgres createdb run

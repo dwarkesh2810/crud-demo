@@ -1,12 +1,13 @@
 package dto
 
 import (
+	postmodel "crud/internal/modules/post/postModel"
 	"crud/models"
 	"crud/response"
 	"crud/utils"
 )
 
-func DtOPostResponse(request models.Posts) response.PostResponse {
+func DtOPostResponse(request postmodel.Posts) response.PostResponse {
 	return response.PostResponse{
 		UserId:        request.UserId,
 		Title:         request.Title,

@@ -1,6 +1,7 @@
 package initialise
 
 import (
+	postmodel "crud/internal/modules/post/postModel"
 	"crud/models"
 	"log"
 	"os"
@@ -18,7 +19,7 @@ func Init() {
 		log.Fatal("Error to connect DB")
 	}
 
-	err = db.AutoMigrate(&models.Posts{}, &models.Users{}, &models.Category{})
+	err = db.AutoMigrate(&postmodel.Posts{}, &models.Users{}, &models.Category{})
 
 	if err != nil {
 		log.Fatal("failed to migrate")

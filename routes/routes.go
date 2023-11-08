@@ -2,7 +2,7 @@ package routes
 
 import (
 	"crud/controller"
-	"crud/middleware"
+	"crud/internal/middleware"
 	"fmt"
 	"log"
 	"os"
@@ -25,12 +25,17 @@ func Routes(router *gin.Engine) {
 	router.POST("/post/create", middleware.RequireAuth, controller.CreatePost)
 	router.PUT("/post/update", middleware.RequireAuth, controller.UpdatePost)
 	router.DELETE("/post/delete", middleware.RequireAuth, controller.DeletePost)
+	router.GET("/post/by_category", controller.GetPostByCategory)
+	router.GET("/post/by_user", controller.GetPostByUser)
+	router.GET("/post/by_user_cat", controller.GetPostDateByUserAndCategory)
 
 	router.POST("user/signup", controller.Sugnup)
 	router.POST("user/login", controller.Login)
+
 	router.GET("/category", controller.GetCategoryList)
 	router.POST("/category/create", controller.CreateCategory)
 	router.DELETE("/category/delete", controller.DeleteCategory)
+
 }
 
 func RegisterRoutes() {

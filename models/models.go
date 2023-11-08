@@ -1,13 +1,13 @@
 package models
 
-type Posts struct {
-	ID           uint   `json:"id" gorm:"primaryKey"`
-	UserId       string `json:"user_id" gorm:"not null"`
-	Title        string `json:"title" gorm:"not null"`
-	Body         string `json:"body" gorm:"not null"`
-	CategoryType string `json:"category" gorm:"not null"`
-	CreatedAt    string `json:"created_at" gorm:"not null"`
-}
+// type Posts struct {
+// 	ID           uint   `json:"id" gorm:"primaryKey"`
+// 	UserId       string `json:"user_id" gorm:"not null"`
+// 	Title        string `json:"title" gorm:"not null"`
+// 	Body         string `json:"body" gorm:"not null"`
+// 	CategoryType string `json:"category" gorm:"not null"`
+// 	CreatedAt    string `json:"created_at" gorm:"not null"`
+// }
 
 type Users struct {
 	ID        uint   `json:"id" gorm:"primaryKey"`
@@ -22,7 +22,7 @@ type Users struct {
 
 type Category struct {
 	ID            uint   `json:"id" gorm:"primaryKey"`
-	Category_Type string `json:"category" gorm:"not null" db:"category_type"`
+	Category_Type string `json:"category" gorm:"not null;uniqueIndex" db:"category_type"`
 }
 
 type Response struct {

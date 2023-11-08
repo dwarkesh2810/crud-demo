@@ -29,10 +29,15 @@ type RegisterRequest struct {
 	Password  string `json:"password" binding:"required,min=8"`
 }
 
-type CategoryCreateRequest struct {
-	Category string `form:"category" db:"category_type"`
+type CategoryRequest struct {
+	Category string `json:"category" db:"category_type"`
 }
 
 type CategoryDeleteRequest struct {
-	Category string `form:"category_type" db:"category_type"`
+	Category string `json:"category_type" db:"category_type"`
+}
+
+type UserAndCategoryRequest struct {
+	UserID   string `json:"user_id"`
+	Category string `json:"category" db:"category_type"`
 }
