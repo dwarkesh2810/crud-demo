@@ -1,0 +1,95 @@
+package utils
+
+import (
+	"crud/models"
+	"encoding/json"
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
+)
+
+func Now() string {
+	return time.Now().Format("2006-01-02 15:04:05")
+}
+
+func HashData(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), err
+}
+
+func VerifyHashedData(hashedString string, dataString string) (bool, string) {
+	err := bcrypt.CompareHashAndPassword([]byte(dataString), []byte(hashedString))
+	check := true
+	msg := ""
+
+	if err != nil {
+		msg = fmt.Sprintf("email or password is incorrect")
+		check = false
+		return check, msg
+	}
+	return check, msg
+}
+
+func GetNewUUID() string {
+	newUUID := uuid.New()
+	return newUUID.String()
+}
+
+func GetTokenFromHeader(c *gin.Context) (string, error) {
+	authHeader := c.GetHeader("Authorization")
+
+	// Check if the header is present and starts with "Bearer "
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		return "", fmt.Errorf("Invalid or Missing Token")
+	}
+
+	// Extract the token without the "Bearer " prefix
+	authToken := authHeader[7:]
+
+	return authToken, nil
+
+}
+
+func MapToString(mapData map[string]string) string {
+	str, _ := json.Marshal(mapData)
+	return string(str)
+}
+
+func StringToMap(stringData string) map[string]string {
+	var out map[string]string
+
+	_ = json.Unmarshal([]byte(stringData), &out)
+
+	return out
+}
+
+func ParseError(err error) []string {
+	data := strings.Split(err.Error(), "Error:")
+	return data
+}
+
+func DataMarshal(data interface{}) (interface{}, error) {
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return "", err
+	}
+	return string(jsonData), nil
+}
+
+func JsonResponse(c *gin.Context, statusCode int, success int, data interface{}, err string) {
+	var response models.Response = models.Response{
+		Success: success,
+		Data:    data,
+		Error:   err,
+	}
+	c.JSON(statusCode, response)
+}
+
+// docker run image_name:tag_name
