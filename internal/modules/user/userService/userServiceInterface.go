@@ -1,4 +1,4 @@
-package postservice
+package userservice
 
-type PostServiceInterface interface {
+type UserServiceInterface interface {
 }

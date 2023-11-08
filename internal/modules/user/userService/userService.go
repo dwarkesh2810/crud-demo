@@ -1,13 +1,15 @@
-package postservice
+package userservice
 
-import postrepository "crud/internal/modules/post/postRepository"
+import (
+	userrepository "crud/internal/modules/user/userRepository"
+)
 
-type PostService struct {
-	postRepo postrepository.PostRepositoryInterface
+type UserService struct {
+	userRepo userrepository.UserRepositoryInterface
 }
 
-func New() *PostService {
-	return &PostService{
-		postRepo: postrepository.New(),
+func New() *UserService {
+	return &UserService{
+		userRepo: userrepository.New(),
 	}
 }

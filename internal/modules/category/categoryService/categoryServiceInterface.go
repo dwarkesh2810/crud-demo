@@ -1,4 +1,4 @@
 package categoryservice
 
-type PostServiceInterface interface {
+type CategoryServiceInterface interface {
 }

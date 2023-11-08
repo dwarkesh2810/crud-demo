@@ -1,15 +1,15 @@
 package categoryservice
 
 import (
-	postrepository "crud/internal/modules/post/postRepository"
+	categoryrepository "crud/internal/modules/category/categoryRepository"
 )
 
-type PostService struct {
-	postRepo postrepository.PostRepositoryInterface
+type CategoryService struct {
+	categoryRepo categoryrepository.CategoryRepositoryInterface
 }
 
-func New() *PostService {
-	return &PostService{
-		postRepo: postrepository.New(),
+func New() *CategoryService {
+	return &CategoryService{
+		categoryRepo: categoryrepository.New(),
 	}
 }
