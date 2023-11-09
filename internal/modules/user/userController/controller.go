@@ -39,6 +39,7 @@ func (userController *UserController) RegisterUser(c *gin.Context) {
 
 	if err != nil {
 		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, err.Error())
+		return
 	}
 
 	helper.JsonResponse(c, http.StatusCreated, 1, user, "")

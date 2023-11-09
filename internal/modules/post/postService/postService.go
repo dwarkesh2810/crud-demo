@@ -61,3 +61,19 @@ func (postservice *PostService) UpdatePost(userId string, request postrequest.Po
 
 	return postdto.DtOUpdatePostResponse(updatedPost), nil
 }
+
+func (postservice *PostService) DeletePost(request postrequest.PostDeleteRequest) (postresponse.DeletedPostResponse, error) {
+
+	var response postresponse.DeletedPostResponse
+	post, err := postservice.postRepo.GetPostById(request.ID)
+	if err != nil {
+		return response, err
+	}
+
+	deletePost, err := postservice.postRepo.Delete(post)
+	if err != nil {
+		return response, err
+	}
+
+	return postdto.DtODeletePostResponse(deletePost), nil
+}

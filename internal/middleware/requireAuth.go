@@ -18,6 +18,7 @@ func RequireAuth(c *gin.Context) {
 
 	if err != nil {
 		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, err.Error())
+		c.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 
@@ -35,16 +36,14 @@ func RequireAuth(c *gin.Context) {
 		// Check expiration time
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
-		// // Find the user with token sub
-		// var user usermodel.Users
-		// // initializers.DB.Table("users").Select("id", "email", "password", ).Where("ID = ?", claims["sub"]).Scan(&user)
-		// config.DB.First(&user, "user_id = ?", claims["sub"])
 
 		user := userrepository.New().FindByID(claims["sub"].(string))
 
 		if user.UserID == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
 		// Attach to request
 		users := userdto.ToUser(user)
@@ -55,6 +54,7 @@ func RequireAuth(c *gin.Context) {
 
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
 
 }

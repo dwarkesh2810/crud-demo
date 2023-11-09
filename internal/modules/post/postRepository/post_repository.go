@@ -58,3 +58,16 @@ func (postRepository *PostRepository) Update(post postmodel.Posts) (postmodel.Po
 
 	return postAfterUpdate, nil
 }
+
+func (postRepository *PostRepository) Delete(post postmodel.Posts) (postmodel.Posts, error) {
+
+	postDeleted := post
+
+	result := config.DB.Delete(&postDeleted)
+
+	if result.Error != nil {
+		return postmodel.Posts{}, errors.New("Unexpected database error")
+	}
+
+	return postDeleted, nil
+}

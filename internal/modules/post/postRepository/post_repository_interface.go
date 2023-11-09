@@ -9,4 +9,5 @@ type PostRepositoryInterface interface {
 	Create(postmodel.Posts) (postmodel.Posts, error)
 	Update(postmodel.Posts) (postmodel.Posts, error)
 	GetPostById(uint) (postmodel.Posts, error)
+	Delete(postmodel.Posts) (postmodel.Posts, error)
 }

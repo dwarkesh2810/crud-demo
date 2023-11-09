@@ -9,4 +9,5 @@ type PostServiceInterface interface {
 	GetPosts() postresponse.PostsResponse
 	CreatePost(string, postrequest.PostCreateRequest) (postresponse.PostResponse, error)
 	UpdatePost(string, postrequest.PostUpdateRequest) (postresponse.UpdatePostResponse, error)
+	DeletePost(postrequest.PostDeleteRequest) (postresponse.DeletedPostResponse, error)
 }

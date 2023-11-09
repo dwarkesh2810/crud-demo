@@ -34,3 +34,13 @@ func DtOUpdatePostResponse(request postmodel.Posts) postresponse.UpdatePostRespo
 		Category_Type: request.CategoryType,
 	}
 }
+
+func DtODeletePostResponse(request postmodel.Posts) postresponse.DeletedPostResponse {
+	return postresponse.DeletedPostResponse{
+		ID:            int(request.ID),
+		UserId:        request.UserId,
+		Title:         request.Title,
+		Body:          request.Body,
+		Category_Type: request.CategoryType,
+	}
+}

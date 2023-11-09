@@ -19,3 +19,11 @@ type UpdatePostResponse struct {
 	Body          string `json:"body"`
 	Category_Type string `json:"category"`
 }
+
+type DeletedPostResponse struct {
+	ID            int    `json:"id"`
+	UserId        string `json:"user_id"`
+	Title         string `json:"title"`
+	Body          string `json:"body"`
+	Category_Type string `json:"category"`
+}
