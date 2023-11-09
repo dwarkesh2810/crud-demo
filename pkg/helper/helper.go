@@ -1,8 +1,7 @@
-package utils
+package helper
 
 import (
 	userresponse "crud/internal/modules/user/userResponse"
-	"crud/models"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -12,6 +11,12 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
+
+type Response struct {
+	Success int         `json:"success"`
+	Data    interface{} `json:"data,omitempty"`
+	Error   string      `json:"error,omitempty"`
+}
 
 func Now() string {
 	return time.Now().Format("2006-01-02 15:04:05")
@@ -58,19 +63,6 @@ func GetTokenFromHeader(c *gin.Context) (string, error) {
 
 }
 
-func MapToString(mapData map[string]string) string {
-	str, _ := json.Marshal(mapData)
-	return string(str)
-}
-
-func StringToMap(stringData string) map[string]string {
-	var out map[string]string
-
-	_ = json.Unmarshal([]byte(stringData), &out)
-
-	return out
-}
-
 func ParseError(err error) []string {
 	data := strings.Split(err.Error(), "Error:")
 	return data
@@ -85,7 +77,7 @@ func DataMarshal(data interface{}) (interface{}, error) {
 }
 
 func JsonResponse(c *gin.Context, statusCode int, success int, data interface{}, err string) {
-	var response models.Response = models.Response{
+	var response Response = Response{
 		Success: success,
 		Data:    data,
 		Error:   err,

@@ -2,7 +2,7 @@ package postrepository
 
 import (
 	postmodel "crud/internal/modules/post/postModel"
-	"crud/pkg/database"
+	"crud/pkg/config"
 	"errors"
 	"log"
 
@@ -15,7 +15,7 @@ type PostRepository struct {
 
 func New() *PostRepository {
 	return &PostRepository{
-		DB: database.Connection(),
+		DB: config.Connection(),
 	}
 }
 
@@ -36,6 +36,25 @@ func (postRepository *PostRepository) Create(post postmodel.Posts) (postmodel.Po
 	return newPost, nil
 }
 
+func (postRepository *PostRepository) GetPostById(id uint) (postmodel.Posts, error) {
+	var post postmodel.Posts
+	result := config.DB.First(&post, "id = ?", id)
+
+	if result.Error != nil {
+		return post, errors.New("unexpected Database Error")
+	}
+	return post, nil
+}
+
 func (postRepository *PostRepository) Update(post postmodel.Posts) (postmodel.Posts, error) {
-	return postmodel.Posts{}, nil
+
+	postAfterUpdate := post
+
+	result := config.DB.Save(&postAfterUpdate)
+
+	if result.Error != nil {
+		return postmodel.Posts{}, errors.New("Unexpected database error")
+	}
+
+	return postAfterUpdate, nil
 }

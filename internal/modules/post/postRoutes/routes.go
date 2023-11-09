@@ -13,7 +13,7 @@ func Routes(router *gin.Engine) {
 
 	router.GET("/posts", postController.ShowPost)
 	router.POST("/post/create", middleware.RequireAuth, postController.CreatePost)
-	// router.PUT("/post/update", middleware.RequireAuth, controller.UpdatePost)
+	router.PUT("/post/update", middleware.RequireAuth, postController.UpdatePost)
 	// router.DELETE("/post/delete", middleware.RequireAuth, controller.DeletePost)
 	// router.GET("/post/by_category", controller.GetPostByCategory)
 	// router.GET("/post/by_user", controller.GetPostByUser)

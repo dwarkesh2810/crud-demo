@@ -1,4 +1,4 @@
-package database
+package config
 
 import (
 	categorymodel "crud/internal/modules/category/categoryModel"

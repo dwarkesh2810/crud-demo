@@ -3,7 +3,7 @@ package userdto
 import (
 	usermodel "crud/internal/modules/user/userModel"
 	userresponse "crud/internal/modules/user/userResponse"
-	"crud/utils"
+	"crud/pkg/helper"
 )
 
 func ToUser(user usermodel.Users) *userresponse.UserResponse {
@@ -11,7 +11,7 @@ func ToUser(user usermodel.Users) *userresponse.UserResponse {
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 		UserID:    user.UserID,
-		CreatedAt: utils.Now(),
+		CreatedAt: helper.Now(),
 		Email:     user.Email,
 		Password:  user.Password,
 	}

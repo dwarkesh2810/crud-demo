@@ -3,7 +3,7 @@ package usercontroller
 import (
 	userrequest "crud/internal/modules/user/userRequest"
 	userservice "crud/internal/modules/user/userService"
-	"crud/utils"
+	"crud/pkg/helper"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,24 +24,24 @@ func (userController *UserController) RegisterUser(c *gin.Context) {
 	err := c.ShouldBindJSON(&request)
 
 	if err != nil {
-		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Error While Binding Request")
+		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "Error While Binding Request")
 		return
 	}
 
 	ok := userController.userService.CheckUserExist(request.Email)
 
 	if ok {
-		utils.JsonResponse(c, http.StatusConflict, 0, nil, "Email already registered")
+		helper.JsonResponse(c, http.StatusConflict, 0, nil, "Email already registered")
 		return
 	}
 
 	user, err := userController.userService.Create(request)
 
 	if err != nil {
-		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, err.Error())
+		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, err.Error())
 	}
 
-	utils.JsonResponse(c, http.StatusCreated, 1, user, "")
+	helper.JsonResponse(c, http.StatusCreated, 1, user, "")
 
 }
 
@@ -51,16 +51,16 @@ func (userController *UserController) LoginUser(c *gin.Context) {
 	err := c.ShouldBindJSON(&request)
 
 	if err != nil {
-		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Error While Binding Request")
+		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "Error While Binding Request")
 		return
 	}
 
 	data, err := userController.userService.Login(request)
 
 	if err != nil {
-		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "")
+		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "")
 		return
 	}
 
-	utils.JsonResponse(c, http.StatusOK, 1, data, "")
+	helper.JsonResponse(c, http.StatusOK, 1, data, "")
 }

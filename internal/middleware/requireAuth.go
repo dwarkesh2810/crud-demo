@@ -1,10 +1,9 @@
 package middleware
 
 import (
-	"crud/dto"
-	usermodel "crud/internal/modules/user/userModel"
-	"crud/pkg/database"
-	"crud/utils"
+	userdto "crud/internal/modules/user/userDto"
+	userrepository "crud/internal/modules/user/userRepository"
+	"crud/pkg/helper"
 	"fmt"
 	"net/http"
 	"os"
@@ -15,10 +14,10 @@ import (
 )
 
 func RequireAuth(c *gin.Context) {
-	tokenString, err := utils.GetTokenFromHeader(c)
+	tokenString, err := helper.GetTokenFromHeader(c)
 
 	if err != nil {
-		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, err.Error())
+		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, err.Error())
 		return
 	}
 
@@ -37,15 +36,18 @@ func RequireAuth(c *gin.Context) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-		// Find the user with token sub
-		var user usermodel.Users
-		// initializers.DB.Table("users").Select("id", "email", "password", ).Where("ID = ?", claims["sub"]).Scan(&user)
-		database.DB.First(&user, "user_id = ?", claims["sub"])
+		// // Find the user with token sub
+		// var user usermodel.Users
+		// // initializers.DB.Table("users").Select("id", "email", "password", ).Where("ID = ?", claims["sub"]).Scan(&user)
+		// config.DB.First(&user, "user_id = ?", claims["sub"])
+
+		user := userrepository.New().FindByID(claims["sub"].(string))
+
 		if user.UserID == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 		// Attach to request
-		users := dto.ToDtoUser(user)
+		users := userdto.ToUser(user)
 		c.Set("user", users)
 
 		// continue

@@ -25,4 +25,12 @@ func DtoPostsResponse(posts []postmodel.Posts) postresponse.PostsResponse {
 	return response
 }
 
-
+func DtOUpdatePostResponse(request postmodel.Posts) postresponse.UpdatePostResponse {
+	return postresponse.UpdatePostResponse{
+		ID:            int(request.ID),
+		UserId:        request.UserId,
+		Title:         request.Title,
+		Body:          request.Body,
+		Category_Type: request.CategoryType,
+	}
+}

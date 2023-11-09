@@ -6,7 +6,7 @@ import (
 	userrepository "crud/internal/modules/user/userRepository"
 	userrequest "crud/internal/modules/user/userRequest"
 	userresponse "crud/internal/modules/user/userResponse"
-	"crud/utils"
+	"crud/pkg/helper"
 	"errors"
 	"os"
 	"time"
@@ -38,8 +38,8 @@ func (userService *UserService) Create(request userrequest.RegisterRequest) (use
 	user.LastName = request.LastName
 	user.Email = request.Email
 	user.Password = string(hashPassword)
-	user.CreatedAt = utils.Now()
-	user.UserID = utils.GetNewUUID()
+	user.CreatedAt = helper.Now()
+	user.UserID = helper.GetNewUUID()
 	user.UserRole = "user"
 
 	newUser, err := userService.userRepo.Create(user)
@@ -63,9 +63,9 @@ func (userService *UserService) Login(request userrequest.LoginRequest) (userres
 		return response, errors.New("invalid credentials")
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(existUser.Password), []byte(request.Password))
+	ok, _ := helper.VerifyHashedData(request.Password, existUser.Password)
 
-	if err != nil {
+	if !ok {
 		return response, errors.New("invalid credentials")
 	}
 

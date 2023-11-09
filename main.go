@@ -1,13 +1,13 @@
 package main
 
 import (
-	"crud/initialise"
+	"crud/pkg/config"
 	"crud/pkg/routes"
 )
 
 func init() {
-	initialise.LoadEnvVariable()
-	initialise.Init()
+	config.LoadEnvVariable()
+	config.Init()
 	routes.Init()
 }
 

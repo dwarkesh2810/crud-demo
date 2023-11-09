@@ -8,3 +8,4 @@ type Posts struct {
 	CategoryType string `json:"category" gorm:"not null"`
 	CreatedAt    string `json:"created_at" gorm:"not null"`
 }
+

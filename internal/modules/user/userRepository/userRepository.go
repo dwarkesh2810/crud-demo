@@ -2,7 +2,7 @@ package userrepository
 
 import (
 	usermodel "crud/internal/modules/user/userModel"
-	"crud/pkg/database"
+	"crud/pkg/config"
 	"errors"
 
 	"gorm.io/gorm"
@@ -14,7 +14,7 @@ type UserRepository struct {
 
 func New() *UserRepository {
 	return &UserRepository{
-		DB: database.Connection(),
+		DB: config.Connection(),
 	}
 }
 
@@ -34,8 +34,8 @@ func (userRepository *UserRepository) FindByEmail(email string) usermodel.Users 
 	return user
 }
 
-func (userRepository *UserRepository) FindByID(id int) usermodel.Users {
+func (userRepository *UserRepository) FindByID(userId string) usermodel.Users {
 	var user usermodel.Users
-	userRepository.DB.First(&user, "id= ?", id)
+	userRepository.DB.First(&user, "user_id= ?", userId)
 	return user
 }

@@ -6,7 +6,7 @@ import (
 	postrepository "crud/internal/modules/post/postRepository"
 	postrequest "crud/internal/modules/post/postRequest"
 	postresponse "crud/internal/modules/post/postResponse"
-	"crud/utils"
+	"crud/pkg/helper"
 )
 
 type PostService struct {
@@ -24,7 +24,7 @@ func (postService *PostService) GetPosts() postresponse.PostsResponse {
 	return postdto.DtoPostsResponse(posts)
 }
 
-func (postService *PostService) StorePost(userId string, request postrequest.PostCreateRequest) (postresponse.PostResponse, error) {
+func (postService *PostService) CreatePost(userId string, request postrequest.PostCreateRequest) (postresponse.PostResponse, error) {
 	var post postmodel.Posts
 	var response postresponse.PostResponse
 
@@ -32,7 +32,7 @@ func (postService *PostService) StorePost(userId string, request postrequest.Pos
 	post.Title = request.Title
 	post.Body = request.Body
 	post.CategoryType = request.Category
-	post.CreatedAt = utils.Now()
+	post.CreatedAt = helper.Now()
 
 	newPost, err := postService.postRepo.Create(post)
 
@@ -42,4 +42,22 @@ func (postService *PostService) StorePost(userId string, request postrequest.Pos
 
 	return postdto.DtOPostResponse(newPost), nil
 
+}
+
+func (postservice *PostService) UpdatePost(userId string, request postrequest.PostUpdateRequest) (postresponse.UpdatePostResponse, error) {
+
+	var response postresponse.UpdatePostResponse
+	post, err := postservice.postRepo.GetPostById(request.ID)
+	post.UserId = userId
+	post.ID = request.ID
+	post.Body = request.Body
+	post.CategoryType = request.Category
+	post.Title = request.Title
+
+	updatedPost, err := postservice.postRepo.Update(post)
+	if err != nil {
+		return response, err
+	}
+
+	return postdto.DtOUpdatePostResponse(updatedPost), nil
 }
