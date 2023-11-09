@@ -1,8 +1,9 @@
-package initialise
+package database
 
 import (
+	categorymodel "crud/internal/modules/category/categoryModel"
 	postmodel "crud/internal/modules/post/postModel"
-	"crud/models"
+	usermodel "crud/internal/modules/user/userModel"
 	"log"
 	"os"
 
@@ -19,7 +20,7 @@ func Init() {
 		log.Fatal("Error to connect DB")
 	}
 
-	err = db.AutoMigrate(&postmodel.Posts{}, &models.Users{}, &models.Category{})
+	err = db.AutoMigrate(&postmodel.Posts{}, &usermodel.Users{}, &categorymodel.Category{})
 
 	if err != nil {
 		log.Fatal("failed to migrate")

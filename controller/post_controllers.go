@@ -2,9 +2,9 @@ package controller
 
 import (
 	"crud/dto"
-	"crud/initialise"
 	postmodel "crud/internal/modules/post/postModel"
 	postservice "crud/internal/modules/post/postService"
+	"crud/pkg/database"
 	"crud/request"
 	"crud/utils"
 	"log"
@@ -26,7 +26,7 @@ func New() *Controllers {
 func GetPosts(c *gin.Context) {
 	var posts []postmodel.Posts
 
-	result := initialise.DB.Find(&posts)
+	result := database.DB.Find(&posts)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
@@ -58,7 +58,7 @@ func CreatePost(c *gin.Context) {
 	p.CreatedAt = utils.Now()
 	p.CategoryType = post.Category
 
-	result := initialise.DB.Create(&p)
+	result := database.DB.Create(&p)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
@@ -86,7 +86,7 @@ func UpdatePost(c *gin.Context) {
 		return
 	}
 
-	result := initialise.DB.First(&post, "id = ?", updatedPost.ID)
+	result := database.DB.First(&post, "id = ?", updatedPost.ID)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
@@ -101,7 +101,7 @@ func UpdatePost(c *gin.Context) {
 	post.Body = updatedPost.Body
 	post.Title = updatedPost.Title
 	post.CategoryType = updatedPost.Category
-	result = initialise.DB.Save(&post)
+	result = database.DB.Save(&post)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
@@ -128,7 +128,7 @@ func DeletePost(c *gin.Context) {
 		return
 	}
 
-	result := initialise.DB.First(&post, "id = ?", deletePost.ID)
+	result := database.DB.First(&post, "id = ?", deletePost.ID)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
@@ -140,7 +140,7 @@ func DeletePost(c *gin.Context) {
 		return
 	}
 
-	result = initialise.DB.Delete(&post)
+	result = database.DB.Delete(&post)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
@@ -161,7 +161,7 @@ func GetPostByCategory(c *gin.Context) {
 		return
 	}
 
-	result := initialise.DB.Find(&posts, "category_type = ?", cat.Category)
+	result := database.DB.Find(&posts, "category_type = ?", cat.Category)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
@@ -180,7 +180,7 @@ func GetPostByUser(c *gin.Context) {
 		return
 	}
 
-	result := initialise.DB.Find(&posts, "user_id = ?", userID)
+	result := database.DB.Find(&posts, "user_id = ?", userID)
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
 		return
@@ -199,7 +199,7 @@ func GetPostDateByUserAndCategory(c *gin.Context) {
 		utils.JsonResponse(c, http.StatusUnauthorized, 0, nil, utils.ParseError(err)[1])
 		return
 	}
-	db := initialise.DB
+	db := database.DB
 	result := db.Where(
 		db.Where("user_id = ?", reqPost.UserID).Where(db.Where("category_type = ?", reqPost.Category))).Find(&posts)
 

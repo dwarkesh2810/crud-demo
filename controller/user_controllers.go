@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"crud/initialise"
-	"crud/models"
+	usermodel "crud/internal/modules/user/userModel"
+	"crud/pkg/database"
 	"crud/request"
 	"crud/utils"
 	"net/http"
@@ -30,7 +30,7 @@ func Sugnup(c *gin.Context) {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, "", "Failed to hash password")
 	}
 
-	user := models.Users{
+	user := usermodel.Users{
 		UserID:    utils.GetNewUUID(),
 		FirstName: body.FirstName,
 		LastName:  body.LastName,
@@ -39,7 +39,7 @@ func Sugnup(c *gin.Context) {
 		CreatedAt: utils.Now(),
 		UserRole:  "user",
 	}
-	result := initialise.DB.Create(&user)
+	result := database.DB.Create(&user)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, "", "Unexpected database error")
@@ -52,7 +52,7 @@ func Sugnup(c *gin.Context) {
 func Login(c *gin.Context) {
 	// Get data from body
 	var body request.LoginRequest
-	var user models.Users
+	var user usermodel.Users
 
 	err := c.ShouldBindJSON(&body)
 
@@ -61,7 +61,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	result := initialise.DB.Table("users").Select("id", "user_id", "email", "password").Where("email = ?", body.Email).Scan(&user)
+	result := database.DB.Table("users").Select("id", "user_id", "email", "password").Where("email = ?", body.Email).Scan(&user)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, "", "Unexpected database error")

@@ -1,7 +1,7 @@
 package categoryrepository
 
 import (
-	"crud/initialise"
+	"crud/pkg/database"
 
 	"gorm.io/gorm"
 )
@@ -12,6 +12,6 @@ type CategoryRepository struct {
 
 func New() *CategoryRepository {
 	return &CategoryRepository{
-		DB: initialise.DB,
+		DB: database.Connection(),
 	}
 }

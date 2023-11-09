@@ -2,7 +2,7 @@ package main
 
 import (
 	"crud/initialise"
-	"crud/routes"
+	"crud/pkg/routes"
 )
 
 func init() {

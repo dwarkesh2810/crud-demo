@@ -2,7 +2,8 @@ package dto
 
 import (
 	postmodel "crud/internal/modules/post/postModel"
-	"crud/models"
+	usermodel "crud/internal/modules/user/userModel"
+	userresponse "crud/internal/modules/user/userResponse"
 	"crud/response"
 	"crud/utils"
 )
@@ -17,8 +18,8 @@ func DtOPostResponse(request postmodel.Posts) response.PostResponse {
 	}
 }
 
-func ToDtoUser(user models.Users) *response.UserDataResponse {
-	return &response.UserDataResponse{
+func ToDtoUser(user usermodel.Users) *userresponse.UserResponse {
+	return &userresponse.UserResponse{
 		UserID:    user.UserID,
 		CreatedAt: utils.Now(),
 		Email:     user.Email,

@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"crud/dto"
-	"crud/initialise"
-	"crud/models"
+	usermodel "crud/internal/modules/user/userModel"
+	"crud/pkg/database"
 	"crud/utils"
 	"fmt"
 	"net/http"
@@ -38,9 +38,9 @@ func RequireAuth(c *gin.Context) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
 		// Find the user with token sub
-		var user models.Users
+		var user usermodel.Users
 		// initializers.DB.Table("users").Select("id", "email", "password", ).Where("ID = ?", claims["sub"]).Scan(&user)
-		initialise.DB.First(&user, "user_id = ?", claims["sub"])
+		database.DB.First(&user, "user_id = ?", claims["sub"])
 		if user.UserID == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}

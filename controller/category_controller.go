@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"crud/initialise"
-	"crud/models"
+	categorymodel "crud/internal/modules/category/categoryModel"
+	"crud/pkg/database"
 	"crud/request"
 	"crud/utils"
 	"net/http"
@@ -11,8 +11,8 @@ import (
 )
 
 func GetCategoryList(c *gin.Context) {
-	var category []models.Category
-	result := initialise.DB.Find(&category)
+	var category []categorymodel.Category
+	result := database.DB.Find(&category)
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
 		return
@@ -21,7 +21,7 @@ func GetCategoryList(c *gin.Context) {
 }
 
 func CreateCategory(c *gin.Context) {
-	var category models.Category
+	var category categorymodel.Category
 	var cat request.CategoryRequest
 
 	err := c.ShouldBindJSON(&cat)
@@ -31,11 +31,11 @@ func CreateCategory(c *gin.Context) {
 		return
 	}
 
-	category = models.Category{
+	category = categorymodel.Category{
 		Category_Type: cat.Category,
 	}
 
-	result := initialise.DB.Create(&category)
+	result := database.DB.Create(&category)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error or already in List")
@@ -57,15 +57,15 @@ func DeleteCategory(c *gin.Context) {
 
 	}
 
-	var category models.Category
-	result := initialise.DB.First(&category, "category_type = ?", deleteCat)
+	var category categorymodel.Category
+	result := database.DB.First(&category, "category_type = ?", deleteCat)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")
 		return
 	}
 
-	result = initialise.DB.Delete(&category)
+	result = database.DB.Delete(&category)
 
 	if result.Error != nil {
 		utils.JsonResponse(c, http.StatusBadRequest, 0, nil, "Unexpected database error")

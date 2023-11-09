@@ -1,8 +1,8 @@
 package utils
 
 import (
+	userresponse "crud/internal/modules/user/userResponse"
 	"crud/models"
-	"crud/response"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -98,7 +98,7 @@ func GetDataFromContext(c *gin.Context, key string) string {
 	data, ok := c.Get(key)
 
 	if ok {
-		if data, ok := data.(*response.UserDataResponse); ok {
+		if data, ok := data.(*userresponse.UserResponse); ok {
 			userID = data.UserID
 		} else {
 
