@@ -15,3 +15,7 @@ func New() *CategoryRepository {
 		DB: config.Connection(),
 	}
 }
+
+func (categoryRepository *CategoryRepository) List() {
+	
+} 
