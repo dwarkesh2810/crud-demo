@@ -30,6 +30,8 @@ func (postcontrollers *PostControllers) CreatePost(c *gin.Context) {
 	var request postrequest.PostCreateRequest
 	userID := helper.GetDataFromContext(c, "user")
 
+	log.Print("........................", userID)
+
 	if userID == "" {
 		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
 		return

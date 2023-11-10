@@ -48,6 +48,10 @@ func (postservice *PostService) UpdatePost(userId string, request postrequest.Po
 
 	var response postresponse.UpdatePostResponse
 	post, err := postservice.postRepo.GetPostById(request.ID)
+
+	if err != nil {
+		return response, err
+	}
 	post.UserId = userId
 	post.ID = request.ID
 	post.Body = request.Body

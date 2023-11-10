@@ -7,3 +7,7 @@ type CategoryRequest struct {
 type CategoryDeleteRequest struct {
 	Category string `json:"category" db:"category_type"`
 }
+
+type CategoryRequestForId struct {
+	ID int `json:"id"`
+}

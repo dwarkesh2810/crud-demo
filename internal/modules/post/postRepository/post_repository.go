@@ -4,7 +4,6 @@ import (
 	postmodel "crud/internal/modules/post/postModel"
 	"crud/pkg/config"
 	"errors"
-	"log"
 
 	"gorm.io/gorm"
 )
@@ -32,7 +31,6 @@ func (postRepository *PostRepository) Create(post postmodel.Posts) (postmodel.Po
 		return newPost, errors.New("unexpected Database Error")
 	}
 
-	log.Print("new post", newPost)
 	return newPost, nil
 }
 
@@ -71,3 +69,7 @@ func (postRepository *PostRepository) Delete(post postmodel.Posts) (postmodel.Po
 
 	return postDeleted, nil
 }
+
+
+
+// config.DB.Select("posts.id, posts.title, posts.body, categories.category_type, posts.created_at").Joins("join categories.id=posts.category_id").Where("category_id", id).Find(&posts).Scan(&results)

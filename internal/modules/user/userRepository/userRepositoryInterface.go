@@ -1,6 +1,8 @@
 package userrepository
 
-import usermodel "crud/internal/modules/user/userModel"
+import (
+	usermodel "crud/internal/modules/user/userModel"
+)
 
 type UserRepositoryInterface interface {
 	Create(usermodel.Users) (usermodel.Users, error)

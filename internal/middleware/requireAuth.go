@@ -41,7 +41,7 @@ func RequireAuth(c *gin.Context) {
 
 		user := userrepository.New().FindByID(claims["sub"].(string))
 
-		if user.UserID == "" {
+		if user.UserId == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}

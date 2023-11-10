@@ -39,7 +39,7 @@ func (userService *UserService) Create(request userrequest.RegisterRequest) (use
 	user.Email = request.Email
 	user.Password = string(hashPassword)
 	user.CreatedAt = helper.Now()
-	user.UserID = helper.GetNewUUID()
+	user.UserId = helper.GetNewUUID()
 	user.UserRole = "user"
 
 	newUser, err := userService.userRepo.Create(user)
@@ -47,7 +47,7 @@ func (userService *UserService) Create(request userrequest.RegisterRequest) (use
 	if err != nil {
 		return response, errors.New("error on creating user")
 	}
-	return *userdto.ToUser(newUser), nil
+	return userdto.ToUser(newUser), nil
 }
 
 func (userService *UserService) CheckUserExist(email string) bool {
@@ -71,7 +71,7 @@ func (userService *UserService) Login(request userrequest.LoginRequest) (userres
 
 	// Generate jwt token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": existUser.UserID,
+		"sub": existUser.UserId,
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
 	})
 	// Sign and get the complete encoded token as a string using the secret
@@ -81,6 +81,6 @@ func (userService *UserService) Login(request userrequest.LoginRequest) (userres
 		return response, errors.New("error while generating token")
 	}
 
-	return *userdto.ToUserLogin(existUser, accessToken), nil
+	return userdto.ToUserLogin(existUser, accessToken), nil
 
 }

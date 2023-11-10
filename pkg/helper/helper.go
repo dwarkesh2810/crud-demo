@@ -4,6 +4,7 @@ import (
 	userresponse "crud/internal/modules/user/userResponse"
 	"encoding/json"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -90,15 +91,14 @@ func GetDataFromContext(c *gin.Context, key string) string {
 	data, ok := c.Get(key)
 
 	if ok {
-		if data, ok := data.(*userresponse.UserResponse); ok {
-			userID = data.UserID
-		} else {
-
-			return ""
+		if data, ok := data.(userresponse.UserResponse); ok {
+			userID = data.UserId
 		}
 	} else {
 
 		return ""
 	}
+
+	log.Print(userID)
 	return userID
 }

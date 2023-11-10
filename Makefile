@@ -7,6 +7,9 @@ createdb:
 dropdb:
 	@docker exec -it postgres16 dropdb blog
 
+stopdocker:
+	docker stop postgres16
+
 clear:
 	@docker system prune -a
 
