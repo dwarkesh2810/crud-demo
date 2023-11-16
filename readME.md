@@ -19,3 +19,6 @@ Make sure Docker is installed on your system and crate .env file as example.env.
 
 ### CreateDB in PostgreSQL Container
 ```make createdb```
+
+### Run App
+```make run```
