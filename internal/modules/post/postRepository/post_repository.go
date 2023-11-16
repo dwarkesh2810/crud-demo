@@ -18,9 +18,14 @@ func New() *PostRepository {
 	}
 }
 
-func (postRepository *PostRepository) List() []postmodel.Posts {
-	var posts []postmodel.Posts
-	postRepository.DB.Order("created_at desc").Find(&posts)
+func (postRepository *PostRepository) List() []postmodel.PostModel {
+	var posts []postmodel.PostModel
+
+	result := config.DB.Raw("SELECT body, created_at, id, title, user_id, category_type FROM posts JOIN categories ON posts.category_id = categories.category_id ORDER BY created_at DESC;").Scan(&posts)
+	// result := postRepository.DB.Preload("Category").Find(&posts)
+	if result.Error != nil {
+		return nil
+	}
 	return posts
 }
 
@@ -69,7 +74,5 @@ func (postRepository *PostRepository) Delete(post postmodel.Posts) (postmodel.Po
 
 	return postDeleted, nil
 }
-
-
 
 // config.DB.Select("posts.id, posts.title, posts.body, categories.category_type, posts.created_at").Joins("join categories.id=posts.category_id").Where("category_id", id).Find(&posts).Scan(&results)

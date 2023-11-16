@@ -38,8 +38,8 @@ func (userService *UserService) Create(request userrequest.RegisterRequest) (use
 	user.LastName = request.LastName
 	user.Email = request.Email
 	user.Password = string(hashPassword)
-	user.CreatedAt = helper.Now()
-	user.UserId = helper.GetNewUUID()
+	user.CreatedAt = time.Now().Unix()
+	user.UserId = helper.GetNewUserId()
 	user.UserRole = "user"
 
 	newUser, err := userService.userRepo.Create(user)

@@ -21,7 +21,7 @@ func New() *CategoryRepository {
 func (categoryRepository *CategoryRepository) List() []categorymodel.Category {
 	var categories []categorymodel.Category
 
-	categoryRepository.DB.Order("created_at desc").Find(&categories)
+	categoryRepository.DB.Find(&categories)
 
 	return categories
 }

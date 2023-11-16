@@ -1,15 +1,18 @@
 postgres:
 	@docker run --name postgres16 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=1234 -d postgres:16-alpine
 
+start:
+	@docker start postgres16
+
+stop:
+	@docker stop postgres16
+
 createdb:
 	@docker exec -it postgres16 createdb --username=root --owner=root blog
 
 dropdb:
 	@docker exec -it postgres16 dropdb blog
-
-stopdocker:
-	docker stop postgres16
-
+	
 clear:
 	@docker system prune -a
 
@@ -21,5 +24,3 @@ run: build
 
 test:
 	@go test -v ./...
-
-.PHONY: postgres createdb run

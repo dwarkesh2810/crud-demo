@@ -6,7 +6,8 @@ import (
 	postrepository "crud/internal/modules/post/postRepository"
 	postrequest "crud/internal/modules/post/postRequest"
 	postresponse "crud/internal/modules/post/postResponse"
-	"crud/pkg/helper"
+	"errors"
+	"time"
 )
 
 type PostService struct {
@@ -24,15 +25,15 @@ func (postService *PostService) GetPosts() postresponse.PostsResponse {
 	return postdto.DtoPostsResponse(posts)
 }
 
-func (postService *PostService) CreatePost(userId string, request postrequest.PostCreateRequest) (postresponse.PostResponse, error) {
+func (postService *PostService) CreatePost(userId uint, request postrequest.PostCreateRequest) (postresponse.CreatePostResponse, error) {
 	var post postmodel.Posts
-	var response postresponse.PostResponse
+	var response postresponse.CreatePostResponse
 
-	post.UserId = userId
+	post.UserID = userId
 	post.Title = request.Title
 	post.Body = request.Body
-	post.CategoryType = request.Category
-	post.CreatedAt = helper.Now()
+	post.CategoryID = uint(request.Category)
+	post.CreatedAt = time.Now().Unix()
 
 	newPost, err := postService.postRepo.Create(post)
 
@@ -40,11 +41,11 @@ func (postService *PostService) CreatePost(userId string, request postrequest.Po
 		return response, err
 	}
 
-	return postdto.DtOPostResponse(newPost), nil
+	return postdto.DtOCreatePost(newPost), nil
 
 }
 
-func (postservice *PostService) UpdatePost(userId string, request postrequest.PostUpdateRequest) (postresponse.UpdatePostResponse, error) {
+func (postservice *PostService) UpdatePost(userId uint, request postrequest.PostUpdateRequest) (postresponse.UpdatePostResponse, error) {
 
 	var response postresponse.UpdatePostResponse
 	post, err := postservice.postRepo.GetPostById(request.ID)
@@ -52,10 +53,15 @@ func (postservice *PostService) UpdatePost(userId string, request postrequest.Po
 	if err != nil {
 		return response, err
 	}
-	post.UserId = userId
+
+	if post.UserID != userId {
+		return response, errors.New("you can not modify others post")
+	}
+
+	post.UserID = userId
 	post.ID = request.ID
 	post.Body = request.Body
-	post.CategoryType = request.Category
+	post.CategoryID = request.Category
 	post.Title = request.Title
 
 	updatedPost, err := postservice.postRepo.Update(post)
@@ -66,12 +72,16 @@ func (postservice *PostService) UpdatePost(userId string, request postrequest.Po
 	return postdto.DtOUpdatePostResponse(updatedPost), nil
 }
 
-func (postservice *PostService) DeletePost(request postrequest.PostDeleteRequest) (postresponse.DeletedPostResponse, error) {
+func (postservice *PostService) DeletePost(userId uint, request postrequest.PostDeleteRequest) (postresponse.DeletedPostResponse, error) {
 
 	var response postresponse.DeletedPostResponse
 	post, err := postservice.postRepo.GetPostById(request.ID)
 	if err != nil {
 		return response, err
+	}
+
+	if post.UserID != userId {
+		return response, errors.New("you can not modify others post")
 	}
 
 	deletePost, err := postservice.postRepo.Delete(post)

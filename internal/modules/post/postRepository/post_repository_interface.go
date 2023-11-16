@@ -5,7 +5,7 @@ import (
 )
 
 type PostRepositoryInterface interface {
-	List() []postmodel.Posts
+	List() []postmodel.PostModel 
 	Create(postmodel.Posts) (postmodel.Posts, error)
 	Update(postmodel.Posts) (postmodel.Posts, error)
 	GetPostById(uint) (postmodel.Posts, error)

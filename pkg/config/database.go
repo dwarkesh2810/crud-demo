@@ -27,6 +27,8 @@ func Init() {
 	}
 
 	DB = db
+
+	
 }
 
 func Connection() *gorm.DB {

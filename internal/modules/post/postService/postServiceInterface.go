@@ -7,7 +7,7 @@ import (
 
 type PostServiceInterface interface {
 	GetPosts() postresponse.PostsResponse
-	CreatePost(string, postrequest.PostCreateRequest) (postresponse.PostResponse, error)
-	UpdatePost(string, postrequest.PostUpdateRequest) (postresponse.UpdatePostResponse, error)
-	DeletePost(postrequest.PostDeleteRequest) (postresponse.DeletedPostResponse, error)
+	CreatePost(uint, postrequest.PostCreateRequest) (postresponse.CreatePostResponse, error)
+	UpdatePost(uint, postrequest.PostUpdateRequest) (postresponse.UpdatePostResponse, error)
+	DeletePost(uint, postrequest.PostDeleteRequest) (postresponse.DeletedPostResponse, error)
 }

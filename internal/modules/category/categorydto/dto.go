@@ -7,7 +7,7 @@ import (
 
 func DtOCategoryResponse(cat categorymodel.Category) categoryresponse.CategoryResponse {
 	return categoryresponse.CategoryResponse{
-		Category: cat.CategoryType,
+		CategoryType : cat.CategoryType,
 		ID:       cat.CategoryID,
 	}
 }

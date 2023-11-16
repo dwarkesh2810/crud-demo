@@ -30,9 +30,7 @@ func (postcontrollers *PostControllers) CreatePost(c *gin.Context) {
 	var request postrequest.PostCreateRequest
 	userID := helper.GetDataFromContext(c, "user")
 
-	log.Print("........................", userID)
-
-	if userID == "" {
+	if userID == 0 {
 		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
 		return
 	}
@@ -57,15 +55,15 @@ func (postControllers *PostControllers) UpdatePost(c *gin.Context) {
 	var request postrequest.PostUpdateRequest
 	userID := helper.GetDataFromContext(c, "user")
 
-	if userID == "" {
+	if userID == 0 {
 		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
 		return
 	}
 
 	err := c.ShouldBindJSON(&request)
 	if err != nil {
-		log.Print("1")
-		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, helper.ParseError(err)[1])
+
+		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "error while bind")
 		return
 	}
 
@@ -83,7 +81,7 @@ func (postControllers *PostControllers) DeletePost(c *gin.Context) {
 	var request postrequest.PostDeleteRequest
 	userID := helper.GetDataFromContext(c, "user")
 
-	if userID == "" {
+	if userID == 0 {
 		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, "can not get data from context")
 		return
 	}
@@ -95,7 +93,7 @@ func (postControllers *PostControllers) DeletePost(c *gin.Context) {
 		return
 	}
 
-	post, err := postControllers.postService.DeletePost(request)
+	post, err := postControllers.postService.DeletePost(userID, request)
 
 	if err != nil {
 		helper.JsonResponse(c, http.StatusBadRequest, 0, nil, err.Error())

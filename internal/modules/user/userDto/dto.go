@@ -4,6 +4,7 @@ import (
 	usermodel "crud/internal/modules/user/userModel"
 	userresponse "crud/internal/modules/user/userResponse"
 	"crud/pkg/helper"
+	"time"
 )
 
 func ToUser(user usermodel.Users) userresponse.UserResponse {
@@ -11,7 +12,7 @@ func ToUser(user usermodel.Users) userresponse.UserResponse {
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 		UserId:    user.UserId,
-		CreatedAt: helper.Now(),
+		CreatedAt: helper.Now(time.Now().UnixMilli()),
 		Email:     user.Email,
 		Password:  user.Password,
 	}

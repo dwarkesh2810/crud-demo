@@ -1,10 +1,10 @@
 package categoryresponse
 
 type CategoryResponse struct {
-	ID       uint   `json:"id"`
-	Category string `json:"category"`
+	ID           uint   `json:"id"`
+	CategoryType string `json:"category"`
 }
 
 type CategoriesResponse struct {
-	Data []CategoryResponse `json:"data"`
+	Data []CategoryResponse `json:"categories"`
 }

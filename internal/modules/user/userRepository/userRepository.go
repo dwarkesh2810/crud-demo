@@ -34,8 +34,15 @@ func (userRepository *UserRepository) FindByEmail(email string) usermodel.Users 
 	return user
 }
 
-func (userRepository *UserRepository) FindByID(userId string) usermodel.Users {
+func (userRepository *UserRepository) FindByID(userId uint) usermodel.Users {
 	var user usermodel.Users
 	userRepository.DB.First(&user, "user_id= ?", userId)
 	return user
+}
+
+func (userRepository *UserRepository) LastInsertedUserId() uint {
+	var user usermodel.Users
+	userRepository.DB.Last(&user)
+
+	return user.UserId
 }
