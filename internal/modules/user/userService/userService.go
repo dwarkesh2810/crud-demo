@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
@@ -29,7 +28,7 @@ func (userService *UserService) Create(request userrequest.RegisterRequest) (use
 	var response userresponse.UserResponse
 	var user usermodel.Users
 
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), 12)
+	hashPassword, err := helper.HashData(request.Password)
 
 	if err != nil {
 		return response, errors.New("error hashing password")

@@ -43,24 +43,19 @@ func VerifyHashedData(hashedString string, dataString string) (bool, string) {
 	msg := ""
 
 	if err != nil {
-		msg = fmt.Sprintf("email or password is incorrect")
+		msg = "email or password is incorrect"
 		check = false
 		return check, msg
 	}
 	return check, msg
 }
 
-// func GetNewUUID() string {
-// 	newUUID := uuid.New()
-// 	return newUUID.String()
-// }
-
 func GetTokenFromHeader(c *gin.Context) (string, error) {
 	authHeader := c.GetHeader("Authorization")
 
 	// Check if the header is present and starts with "Bearer "
 	if !strings.HasPrefix(authHeader, "Bearer ") {
-		return "", fmt.Errorf("Invalid or Missing Token")
+		return "", fmt.Errorf("invalid or Missing Token")
 	}
 
 	// Extract the token without the "Bearer " prefix
@@ -134,7 +129,6 @@ func SendMail(to string, subject, body string) bool {
 		return false
 	}
 
-	fmt.Println("Email sent successfully!", to)
 	return true
 }
 
@@ -155,3 +149,8 @@ func StructToMap(obj interface{}) map[string]interface{} {
 
 	return data
 }
+
+// func GetNewUUID() string {
+// 	newUUID := uuid.New()
+// 	return newUUID.String()
+// }
