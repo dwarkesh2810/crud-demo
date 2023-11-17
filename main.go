@@ -7,8 +7,8 @@ import (
 
 func init() {
 	config.LoadEnvVariable()
-	// config.Init()
-	// routes.Init()
+	config.Init()
+	routes.Init()
 }
 
 func main() {
