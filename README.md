@@ -9,16 +9,26 @@ Make sure Docker is installed on your system and crate .env file as example.env.
 ## PostgreSQL Docker Commands
 
 ### 1st Time Run PostgreSQL Container
-```make postgres```
+```
+make postgres
+```
 
 ### Stop PostgreSQL Container
-```make stop```
+```
+make stop
+```
 
 ### Start PostgreSQL Container
-```make start```
+```
+make start
+```
 
 ### CreateDB in PostgreSQL Container
-```make createdb```
+```
+make createdb
+```
 
 ### Run App
-```make run```
+```
+make run
+```
