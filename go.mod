@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.1.0
 	github.com/joho/godotenv v1.5.1
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	golang.org/x/crypto v0.14.0
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/gorm v1.25.5
