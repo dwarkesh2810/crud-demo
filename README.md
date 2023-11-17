@@ -4,11 +4,11 @@ This repository contains commands to manage a PostgreSQL instance using Docker a
 
 ## Setup
 
-Make sure Docker is installed on your system and crate .env file as example.env.
+Make sure Docker is installed on your system and crate .env file as example.env
 
 ## PostgreSQL Docker Commands
 
-### 1st Time Run PostgreSQL Container
+### Create Docker Image And Run Postgres
 ```
 make postgres
 ```
