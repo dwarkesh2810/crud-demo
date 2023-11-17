@@ -19,19 +19,19 @@ type EmailSender interface {
 	) error
 }
 
-type GmailSender struct {
+type MailSender struct {
 	fromEmailAddress  string
 	fromEmailPassword string
 }
 
-func NewGmailSender(fromEmailAddress string, fromEmailPassword string) *GmailSender {
-	return &GmailSender{
+func NewGmailSender(fromEmailAddress string, fromEmailPassword string) *MailSender {
+	return &MailSender{
 		fromEmailAddress:  fromEmailAddress,
 		fromEmailPassword: fromEmailPassword,
 	}
 }
 
-func (sender *GmailSender) SendEmail(
+func (sender *MailSender) SendEmail(
 	subject string,
 	content string,
 	to []string,

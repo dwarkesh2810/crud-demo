@@ -5,6 +5,10 @@ import (
 	userresponse "crud/internal/modules/user/userResponse"
 	"encoding/json"
 	"fmt"
+	"log"
+	"net/smtp"
+	"os"
+
 	"reflect"
 	"strings"
 	"time"
@@ -109,30 +113,30 @@ func GetNewUserId() uint {
 	return userId
 }
 
-// func SendMail(to []string, subject, body string) bool {
-// 	from := os.Getenv("FROM")
-// 	password := os.Getenv("PASSWORD")
+func SendMail(to string, subject, body string) bool {
+	from := os.Getenv("FROM")
+	password := os.Getenv("PASSWORD")
 
-// 	// SMTP server configuration
-// 	smtpHost := os.Getenv("SMTP_HOST")
-// 	smtpPort := os.Getenv("SMTP_PORT")
+	// SMTP server configuration
+	smtpHost := os.Getenv("SMTP_HOST")
+	smtpPort := os.Getenv("SMTP_PORT")
 
-// 	// Message construction
-// 	message := []byte("Subject: " + subject + "\r\n" + "\r\n" + body)
+	// Message construction
+	message := []byte("Subject: " + subject + "\r\n" + "\r\n" + body)
 
-// 	// Establish a connection to the SMTP server
-// 	auth := smtp.PlainAuth("", from, password, smtpHost)
+	// Establish a connection to the SMTP server
+	auth := smtp.PlainAuth("", from, password, smtpHost)
 
-// 	// Sending email
-// 	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 		return false
-// 	}
+	// Sending email
+	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, []string{to}, message)
+	if err != nil {
+		log.Fatal(err)
+		return false
+	}
 
-// 	fmt.Println("Email sent successfully!", to)
-// 	return true
-// }
+	fmt.Println("Email sent successfully!", to)
+	return true
+}
 
 func StructToMap(obj interface{}) map[string]interface{} {
 	objValue := reflect.ValueOf(obj)

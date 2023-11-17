@@ -47,6 +47,8 @@ func (userService *UserService) Create(request userrequest.RegisterRequest) (use
 	if err != nil {
 		return response, errors.New("error on creating user")
 	}
+
+	helper.SendMail(request.Email, os.Getenv("SUBJECT"), os.Getenv("MESSAGE"))
 	return userdto.ToUser(newUser), nil
 }
 
